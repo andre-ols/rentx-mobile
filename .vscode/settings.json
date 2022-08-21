@@ -1,3 +1,4 @@
 {
   "editor.codeActionsOnSave": ["editor.formatDocument", "source.fixAll.eslint"],
+  "typescript.suggest.autoImports": true
 }

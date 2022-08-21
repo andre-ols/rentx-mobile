@@ -1,11 +1,41 @@
-import React, { FC } from 'react';
-import { StatusBar } from 'react-native';
+import React, { FC, useCallback, useState } from 'react';
+import { ActivityIndicator, StatusBar } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { CarList, Container, Header, HeaderContent, TotalCars } from './styles';
 import Logo from '../../assets/logo.svg';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { Car } from '../../componets/Car';
+import { CarComponent } from '../../components/CarComponent';
+import { useNavigation, NavigationProp, ParamListBase } from '@react-navigation/native';
+import { api } from '../../services/api';
+import { Car } from '../../Models/Car.Model';
+import { useTheme } from 'styled-components';
+import { Loading } from '../../components/Loading';
 
 export const Home: FC = () => {
+  const navigation = useNavigation<NavigationProp<ParamListBase>>();
+  const [cars, setCars] = useState<Car[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const theme = useTheme();
+
+  const handleCarDetail = (car: Car) => {
+    navigation.navigate('CarDetails', {
+      car,
+    });
+  };
+
+  const fetchCars = async () => {
+    setIsLoading(true);
+    const { data: cars } = await api.get<Car[]>('/cars');
+    setCars(cars);
+    setIsLoading(false);
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchCars();
+    }, []),
+  );
+
   return (
     <Container>
       <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
@@ -15,23 +45,17 @@ export const Home: FC = () => {
           <TotalCars>Total de 12 carros</TotalCars>
         </HeaderContent>
       </Header>
-      <CarList
-        data={[1, 2, 3, 4, 5]}
-        keyExtractor={(item) => String(item)}
-        renderItem={({ item }) => (
-          <Car
-            data={{
-              brand: 'Audi',
-              name: 'A4',
-              rent: {
-                price: 300,
-                preiod: 'diária',
-              },
-              thumbnail: 'https://freepngimg.com/thumb/audi/35227-5-audi-rs5-red.png',
-            }}
-          />
-        )}
-      />
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <CarList
+          data={cars}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <CarComponent data={item} onPress={() => handleCarDetail(item)} />
+          )}
+        />
+      )}
     </Container>
   );
 };

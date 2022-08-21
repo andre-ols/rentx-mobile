@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
-import { BackButton } from '../../componets/BackButton';
-import { ImageSlider } from '../../componets/ImageSlider';
+import { BackButton } from '../../components/BackButton';
+import { ImageSlider } from '../../components/ImageSlider';
 import {
   Accessories,
   Brand,
@@ -20,6 +20,11 @@ import {
   Price,
   Rent,
   RentalPeriod,
+  RentalPrice,
+  RentalPriceDetails,
+  RentalPriceLabel,
+  RentalPriceQuota,
+  RentalPriceTotal,
 } from './styles';
 
 import { Feather } from '@expo/vector-icons';
@@ -30,42 +35,67 @@ import forceSvg from '../../assets/force.svg';
 import gasolineSvg from '../../assets/gasoline.svg';
 import exchangeSvg from '../../assets/exchange.svg';
 import peopleSvg from '../../assets/people.svg';
-import { Accessory } from '../../componets/Accessory';
-import { Button } from '../../componets/Button';
+import { Accessory } from '../../components/Accessory';
+import { Button } from '../../components/Button';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useTheme } from 'styled-components';
+import { useNavigation, NavigationProp, ParamListBase, useRoute } from '@react-navigation/native';
+import { Car } from '../../Models/Car.Model';
+import { getAccessoryIcon } from '../../utils/getAccessoryIcon';
+import { format } from 'date-fns';
+import { getPlatformDate } from '../../utils/getPlatformDate';
+interface Params {
+  car: Car;
+  dates: string[];
+}
 
 export const SchedulingDetails: FC = () => {
+  const navigation = useNavigation<NavigationProp<ParamListBase>>();
+  const { params } = useRoute();
+
+  const { car, dates } = params as Params;
+
+  const startDate = format(getPlatformDate(new Date(dates[0])), 'dd/MM/yyyy');
+  const endDate = format(getPlatformDate(new Date(dates[dates.length - 1])), 'dd/MM/yyyy');
+
+  const handleNavigateToSuccess = () => {
+    navigation.navigate('Success');
+  };
+
+  const handleNavigateToScheduling = () => {
+    navigation.goBack();
+  };
   const theme = useTheme();
   return (
     <Container>
       <Header>
-        <BackButton onPress={() => {}} />
+        <BackButton onPress={handleNavigateToScheduling} />
       </Header>
       <CarImages>
-        <ImageSlider imagesUrl={['https://freepngimg.com/thumb/audi/35227-5-audi-rs5-red.png']} />
+        <ImageSlider imagesUrl={car.photos} />
       </CarImages>
 
       <Content>
         <Details>
           <Description>
-            <Brand>Audi</Brand>
-            <Name>Audi A4</Name>
+            <Brand>{car.brand}</Brand>
+            <Name>{car.name}</Name>
           </Description>
 
           <Rent>
-            <Period>Diário</Period>
-            <Price>R$ 340,00</Price>
+            <Period>{car.rent.period}</Period>
+            <Price>{car.rent.price}</Price>
           </Rent>
         </Details>
 
         <Accessories>
-          <Accessory icon={speedSvg} name="380Km/h" />
-          <Accessory icon={accelerationSvg} name="3.2s" />
-          <Accessory icon={forceSvg} name="800 HP" />
-          <Accessory icon={gasolineSvg} name="Gasolina" />
-          <Accessory icon={exchangeSvg} name="Auto" />
-          <Accessory icon={peopleSvg} name="2 pessoas" />
+          {car.accessories.map((accessory) => (
+            <Accessory
+              key={accessory.type}
+              name={accessory.name}
+              icon={getAccessoryIcon(accessory.type)}
+            />
+          ))}
         </Accessories>
 
         <RentalPeriod>
@@ -75,20 +105,30 @@ export const SchedulingDetails: FC = () => {
 
           <DateInfo>
             <DateTitle>De</DateTitle>
-            <DateValue>20/08/2022</DateValue>
+            <DateValue>{startDate}</DateValue>
           </DateInfo>
 
           <Feather name="chevron-right" size={RFValue(10)} color={theme.colors.text} />
 
           <DateInfo>
-            <DateTitle>De</DateTitle>
-            <DateValue>20/08/2022</DateValue>
+            <DateTitle>ATÉ</DateTitle>
+            <DateValue>{endDate}</DateValue>
           </DateInfo>
         </RentalPeriod>
+
+        <RentalPrice>
+          <RentalPriceLabel>TOTAL</RentalPriceLabel>
+          <RentalPriceDetails>
+            <RentalPriceQuota>
+              R$ {car.rent.price} X {dates.length} diárias
+            </RentalPriceQuota>
+            <RentalPriceTotal>R$ {car.rent.price * dates.length}</RentalPriceTotal>
+          </RentalPriceDetails>
+        </RentalPrice>
       </Content>
 
       <Footer>
-        <Button onPress={() => {}} title="Confirmar" />
+        <Button onPress={handleNavigateToSuccess} title="Confirmar" />
       </Footer>
     </Container>
   );

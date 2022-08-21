@@ -11,6 +11,8 @@ import {
 // import { generateInterval } from './generateInterval';
 import { ptBR } from './localeConfig';
 
+import { generateInterval } from './generateInterval';
+
 LocaleConfig.locales['pt-br'] = ptBR;
 LocaleConfig.defaultLocale = 'pt-br';
 
@@ -71,4 +73,4 @@ function Calendar({ markedDates, onDayPress }: CalendarProps) {
   );
 }
 
-export { Calendar, MarketDatesProps, DayProps };
+export { Calendar, MarketDatesProps, DayProps, generateInterval };

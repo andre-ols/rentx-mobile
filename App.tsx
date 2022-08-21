@@ -1,4 +1,3 @@
-import { Home } from './src/Screens/Home';
 import {
   Archivo_400Regular,
   Archivo_500Medium,
@@ -9,10 +8,8 @@ import {
 import { Inter_400Regular, Inter_500Medium } from '@expo-google-fonts/inter';
 import { ThemeProvider } from 'styled-components/native';
 import theme from './src/styles/theme';
-import { CarDetails } from './src/Screens/CarDetails';
-import { Scheduling } from './src/Screens/Scheduling';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { SchedulingDetails } from './src/Screens/SchedulingDetails';
+import { Routes } from './src/routes';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -30,7 +27,7 @@ export default function App() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider theme={theme}>
-        <SchedulingDetails />
+        <Routes />
       </ThemeProvider>
     </GestureHandlerRootView>
   );
