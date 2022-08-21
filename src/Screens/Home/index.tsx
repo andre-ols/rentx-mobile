@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useState } from 'react';
 import { ActivityIndicator, StatusBar } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { CarList, Container, Header, HeaderContent, TotalCars } from './styles';
+import { CarList, Container, Header, HeaderContent, MyCarsButton, TotalCars } from './styles';
 import Logo from '../../assets/logo.svg';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { CarComponent } from '../../components/CarComponent';
@@ -10,6 +10,7 @@ import { api } from '../../services/api';
 import { Car } from '../../Models/Car.Model';
 import { useTheme } from 'styled-components';
 import { Loading } from '../../components/Loading';
+import { Ionicons } from '@expo/vector-icons';
 
 export const Home: FC = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
@@ -21,6 +22,10 @@ export const Home: FC = () => {
     navigation.navigate('CarDetails', {
       car,
     });
+  };
+
+  const handleOpenMyCard = () => {
+    navigation.navigate('MyCars');
   };
 
   const fetchCars = async () => {
@@ -42,7 +47,7 @@ export const Home: FC = () => {
       <Header>
         <HeaderContent>
           <Logo width={RFValue(108)} height={RFValue(12)} />
-          <TotalCars>Total de 12 carros</TotalCars>
+          <TotalCars>Total de {cars.length} carros</TotalCars>
         </HeaderContent>
       </Header>
       {isLoading ? (
@@ -56,6 +61,14 @@ export const Home: FC = () => {
           )}
         />
       )}
+
+      <MyCarsButton onPress={handleOpenMyCard}>
+        <Ionicons
+          name="ios-car-sport"
+          size={RFValue(32)}
+          color={theme.colors.background_secondary}
+        />
+      </MyCarsButton>
     </Container>
   );
 };

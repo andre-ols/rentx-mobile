@@ -12,10 +12,10 @@ export const Container = styled.View`
 `;
 
 export const Header = styled.View`
-  height: ${RFValue(325)}px;
+  height: ${RFValue(300)}px;
 
   background-color: ${({ theme }) => theme.colors.header};
-  justify-content: center;
+  justify-content: space-between;
   padding: ${RFValue(24)}px;
   padding-top: ${getStatusBarHeight() + 30}px;
 `;
