@@ -4,14 +4,22 @@ import { Home } from '../Screens/Home';
 import { MyCars } from '../Screens/MyCars';
 import { Scheduling } from '../Screens/Scheduling';
 import { SchedulingDetails } from '../Screens/SchedulingDetails';
+import { Splash } from '../Screens/Splash';
 import { Success } from '../Screens/Success';
 
 const { Navigator, Screen } = createStackNavigator();
 
 export const StackRoutes = () => {
   return (
-    <Navigator screenOptions={{ headerShown: false }}>
-      <Screen name="Home" component={Home} />
+    <Navigator screenOptions={{ headerShown: false }} initialRouteName="Splash">
+      <Screen name="Splash" component={Splash} />
+      <Screen
+        name="Home"
+        component={Home}
+        options={{
+          gestureEnabled: false,
+        }}
+      />
       <Screen name="CarDetails" component={CarDetails} />
       <Screen name="Scheduling" component={Scheduling} />
       <Screen name="SchedulingDetails" component={SchedulingDetails} />

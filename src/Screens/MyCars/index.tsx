@@ -26,8 +26,8 @@ import {
   CardFooterPeriod,
 } from './styles';
 import { CarComponent } from '../../components/CarComponent';
-import { Loading } from '../../components/Loading';
 import { Car } from '../../Models/Car.Model';
+import { LoadingAnimate } from '../../components/LoadingAnimate';
 
 interface CarProps {
   id: number;
@@ -72,7 +72,7 @@ export function MyCars() {
         <SubTitle>Conforto, segurança e praticidade.</SubTitle>
       </Header>
       {loading ? (
-        <Loading />
+        <LoadingAnimate />
       ) : (
         <Content>
           <Appointments>

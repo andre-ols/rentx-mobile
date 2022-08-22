@@ -1,5 +1,5 @@
-import React, { FC, useCallback, useState } from 'react';
-import { ActivityIndicator, StatusBar } from 'react-native';
+import React, { FC, useCallback, useEffect, useState } from 'react';
+import { StatusBar, BackHandler } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { CarList, Container, Header, HeaderContent, MyCarsButton, TotalCars } from './styles';
 import Logo from '../../assets/logo.svg';
@@ -11,6 +11,7 @@ import { Car } from '../../Models/Car.Model';
 import { useTheme } from 'styled-components';
 import { Loading } from '../../components/Loading';
 import { Ionicons } from '@expo/vector-icons';
+import { LoadingAnimate } from '../../components/LoadingAnimate';
 
 export const Home: FC = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
@@ -41,6 +42,12 @@ export const Home: FC = () => {
     }, []),
   );
 
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', () => {
+      return true;
+    });
+  }, []);
+
   return (
     <Container>
       <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
@@ -51,7 +58,7 @@ export const Home: FC = () => {
         </HeaderContent>
       </Header>
       {isLoading ? (
-        <Loading />
+        <LoadingAnimate />
       ) : (
         <CarList
           data={cars}
