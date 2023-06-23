@@ -123,7 +123,7 @@ export const CarDetails: FC = () => {
 
           <Rent>
             <Period>{car.rent.period}</Period>
-            <Price>{car.rent.price}</Price>
+            <Price>R${car.rent.price}</Price>
           </Rent>
         </Details>
 

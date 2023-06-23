@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StatusBar, FlatList } from 'react-native';
+import { StatusBar, FlatList, View } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from 'styled-components';
@@ -64,7 +64,13 @@ export function MyCars() {
     <Container>
       <StatusBar barStyle="light-content" translucent backgroundColor="transparent" />
       <Header>
-        <BackButton onPress={handleBack} color={theme.colors.shape} />
+        <View
+          style={{
+            width: 25,
+          }}
+        >
+          <BackButton onPress={handleBack} color={theme.colors.shape} />
+        </View>
         <Title>
           Seus agendamentos {`\n`}
           estão aqui.
